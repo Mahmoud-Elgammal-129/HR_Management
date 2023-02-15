@@ -1,0 +1,433 @@
+﻿
+@{
+    ViewBag.Title = "ReportAttended";
+}
+
+<h2 style="margin-top:120px;">ReportAttended</h2>
+
+<div class="container">
+
+    <div class="search">
+        <input type="text" class="form-control" placeholder="بحث باسم الموظف او القسم" id="txtSearch" />
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">اضافه</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">اضافه موعد الحضور و الانصراف </h5>
+
+                </div>
+                <div class="modal-body">
+                    <table>
+
+
+                        <tr>
+                            <td> الموظف</td>
+                            <td>
+                                <select class="form-control" id="employyeId">
+                                    <option>اختار الموظف</option>
+                                    @foreach (var item in ViewBag.employees)
+                                    {
+                                        <option value="@item.id">@item.name</option>
+
+                                    }
+
+                                </select>
+                                <span id="txtError" class="text-danger">يجب ادخال الاسم </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td> موعد الحضور</td>
+                            <td>
+                                <input type="datetime" placeholder="09:00" class="form-control" id="attend" />
+                                <span id="txtattend" class="text-danger">يجب ادخال المعاد </span>
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td>وقت الانصراف</td>
+                            <td>
+                                <input type="datetime" placeholder="16:00" class="form-control" id="Departure" />
+                                <span id="txtout" class="text-danger">يجب ادخال المعاد </span>
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addAttend">حفظ</button>
+                    <button type="button" class="btn btn-success" id="btncansel">الغاء</button>
+                    <button class="btn btn-success w-100" type="button" id="btnupdate" style="margin-left:250px;">تعديل</button>
+                    <button class="btn btn-danger w-100" type="button" id="btndelete" style="margin-left:250px;">حذف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content d-flex">
+        <div class="div">
+            <label>من:</label>
+            <input type="date" id="from" class="form-control" />
+        </div>
+        <div class="div">
+            <label>الي:</label>
+            <input type="date" id="to" class="form-control" />
+        </div>
+        <div style="margin-top:45px">
+            <button class="btn btn-primary" id="view">عرض</button>
+
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="background-color:cadetblue;color:white">م</th>
+                <th scope="col" style="background-color:cadetblue;color:white">القسم</th>
+                <th scope="col" style="background-color:cadetblue;color:white">اسم الموظف</th>
+                <th scope="col" style="background-color:cadetblue;color:white">وقت الحضور</th>
+                <th scope="col" style="background-color:cadetblue;color:white">وقت الانصراف</th>
+                <th scope="col" style="background-color:cadetblue;color:white">التاريخ</th>
+                <th scope="col" style="background-color:cadetblue;color:white">العمليات</th>
+
+            </tr>
+        </thead>
+        <tbody class="tbody"></tbody>
+
+    </table>
+    <input type="hidden" id="hiddenid" />
+</div>
+
+   
+<script>
+    $(document).ready(function () {
+        loadData();
+        $('#txtError').hide();
+        $('#txtattend').hide();
+        $('#txtout').hide();
+        
+        $("#txtSearch").keyup(function () {        
+            var search = $("#txtSearch").val();
+            $.ajax({
+                url: "/Setting/GetAllAttendeds?search=" + search,
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    var counter = 1;
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    $.each(result, function (key, item) {
+                        var attend = eval("new " + item.attend.replace(/\//g, ""));
+                        var Departure = eval("new " + item.Departure.replace(/\//g, ""));
+                        var date = attend;
+                        attend = padTo2Digits(attend.getHours()) + ':' + padTo2Digits(attend.getMinutes());
+                        Departure = padTo2Digits(Departure.getHours()) + ':' + padTo2Digits(Departure.getMinutes());
+
+                        html += '<tr>';
+                        html += '<td>' + counter + '</td>';
+                        html += '<td>' + item.department + '</td>';
+                        html += '<td>' + item.employeeName + '</td>';
+                        html += '<td>' + attend + '</td>';
+                        html += '<td>' + Departure + '</td>';
+                        html += '<td>' + date.toLocaleDateString('ar-EG', options) + '</td>';
+                        html += '<td><a href="javascript:void(0);" onclick=updateattend(' + item.id + ');>' +
+                            '<i class="fa fa-edit"style="fontsize:x-large;color:blue"></i></a>' +
+                            ' <a href="javascript:void(0);"  onclick=deleteproduct(' + item.id + ');>' +
+                            ' <i class="fa fa-trash"style="fontsize:x-large;color:red;"></i></a>' +
+                            '</td>';
+                        html += '</tr>';
+                        counter++;
+                    });
+
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        });
+        $('#addAttend').click(function () {
+
+            var employeeId = $('#employyeId').val();
+            var attend = $('#attend').val();
+            var Departure = $('#Departure').val();
+            if (attend == null || attend == '' || Departure == null || Departure == '' || employeeId == null ||employeeId == '' ) {
+                $('#txtattend').show();
+                $('#txtout').show();
+                $('#txtError').show();
+            }
+            else {
+                $.ajax({
+                    url: "/Setting/AddAttended?employeeId=" + employeeId +
+                        "&attend=" + attend + "&Departure=" + Departure,
+                    data: '',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "success") {
+                            alert("saved successfuly")
+                            loadData();
+                            Reset();
+                            $(".modal").hide();
+                            $(".modal-backdrop").hide();
+                        }
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+           
+
+        })
+        $('#view').click(function () {
+            var from = $('#from').val();
+            var to = $('#to').val();
+            alert(from);
+            alert(to);
+            var search = $("#txtSearch").val();
+            $.ajax({
+                url: "/Setting/GetAllAttendeds?search=" + search +
+                    "&from=" + from +
+                    "$to=" + to,
+
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    var counter = 1;
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    $.each(result, function (key, item) {
+                        var attend = eval("new " + item.attend.replace(/\//g, ""));
+                        var Departure = eval("new " + item.Departure.replace(/\//g, ""));
+                        var date = attend;
+                        attend = padTo2Digits(attend.getHours()) + ':' + padTo2Digits(attend.getMinutes());
+                        Departure = padTo2Digits(Departure.getHours()) + ':' + padTo2Digits(Departure.getMinutes());
+
+                        html += '<tr>';
+                        html += '<td>' + counter + '</td>';
+                        html += '<td>' + item.department + '</td>';
+                        html += '<td>' + item.employeeName + '</td>';
+                        html += '<td>' + attend + '</td>';
+                        html += '<td>' + Departure + '</td>';
+                        html += '<td>' + date.toLocaleDateString('ar-EG', options) + '</td>';
+                        html += '<td><a href="javascript:void(0);" onclick=updateattend(' + item.id + ');>' +
+                            '<i class="fa fa-edit"style="fontsize:x-large;color:blue"></i></a>' +
+                            ' <a href="javascript:void(0);"  onclick=deleteproduct(' + item.id + ');>' +
+                            ' <i class="fa fa-trash"style="fontsize:x-large;color:red;"></i></a>' +
+                            '</td>';
+                        html += '</tr>';
+                        counter++;
+                    });
+
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        })
+
+        $('#btnupdate').click(function () {
+            var attend = $('#attend').val();
+            var Departure = $('#Departure').val();
+            var employeeId = $('#employyeId').val();
+            var id = $('#hiddenid').val();
+                $.ajax({
+                    url: "/Setting/Updateattend?id=" + id +
+                        "&attend=" + attend +
+                        "&employeeId=" + employeeId +
+                        "&Departure=" + Departure,
+                    data: '',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "success") {
+                            alert("savedsuccessfuly");
+                            $('#exampleModal').hide();
+                            Reset();
+                            loadData();
+                        }
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+
+            
+        })
+        $('#btndelete').click(function () {
+            var id = $('#hiddenid').val();
+            $.ajax({
+                url: "/Setting/Deleteattend?id=" + id,
+
+                data: '',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == "success") {
+                        alert("Data has been deleted.");
+                        $('#exampleModal').hide();
+                        Reset();
+                        loadData();
+                    }
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+
+        })
+
+
+    });
+    $('#btncansel').click(function () {
+        Reset();
+        $('#btncansel').hide();
+        $('#exampleModal').hide();
+        $('#btnsave').show();
+    })
+    function loadData() {
+        //var from = $('#from').val();
+        //var to = $('#to').val();
+        var search = $("#txtSearch").val();
+        $.ajax({
+            url: "/Setting/GetAllAttendeds?search=" + search,
+                //"&from=" + from +
+                //"$to=" + to,
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    var counter = 1;
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    $.each(result, function (key, item) {
+                        var attend = eval("new " + item.attend.replace(/\//g, ""));
+                        var Departure = eval("new " + item.Departure.replace(/\//g, ""));
+                        var date = attend;
+                        attend = padTo2Digits(attend.getHours()) + ':' + padTo2Digits(attend.getMinutes());
+                        Departure = padTo2Digits(Departure.getHours()) + ':' + padTo2Digits(Departure.getMinutes());
+
+                        html += '<tr>';
+                        html += '<td>' + counter + '</td>';
+                        html += '<td>' + item.department + '</td>';
+                        html += '<td>' + item.employeeName + '</td>';
+                        html += '<td>' + attend + '</td>';
+                        html += '<td>' + Departure+ '</td>';
+                        html += '<td>' + date.toLocaleDateString('ar-EG', options) + '</td>';
+                        html += '<td><a href="javascript:void(0);" onclick=updateattend(' + item.id + ');>' +
+                            '<i class="fa fa-edit"style="fontsize:x-large;color:blue"></i></a>' +
+                            ' <a href="javascript:void(0);"  onclick=deleteproduct(' + item.id + ');>' +
+                            ' <i class="fa fa-trash"style="fontsize:x-large;color:red;"></i></a>' +
+                            '</td>';
+                        html += '</tr>';
+                        counter++;
+                    });
+
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+    }
+    function Reset() {
+       $('#txtuser').val('');
+
+        $('#txtdate').val('');
+    }
+
+    function padTo2Digits(num) {
+        return String(num).padStart(2, '0');
+    }
+    function updateattend(id) {
+        alert(id);
+        $('#hiddenid').val(id);
+        $.ajax({
+            url: "/Setting/GetattendByID?id=" + id,
+            data: '',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                $('#btnupdate').show();
+                $('#btncansel').show();
+                $('#btndelete').hide();
+                $('#btnsave').hide();
+                $.each(result, function (key, item) {
+                    $('#exampleModal').show();
+                    $('.modal').css('opacity', 1);
+                    var attend = eval("new " + result.attend.replace(/\//g, ""));
+                    var Departure = eval("new " + result.Departure.replace(/\//g, ""));
+                     attend = padTo2Digits(attend.getHours()) + ':' + padTo2Digits(attend.getMinutes());
+                    Departure = padTo2Digits(Departure.getHours()) + ':' + padTo2Digits(Departure.getMinutes());
+                    $('#employyeId').val(result.employeeId);
+                    $('#attend').val(attend);
+                    $('#Departure').val(Departure);
+                   //var attend = eval("new " + item.attend.replace(/\//g, ""));
+                   // var Departure = eval("new " + item.Departure.replace(/\//g, ""));
+                   // var date = attend;
+                   // attend = padTo2Digits(attend.getHours()) + ':' + padTo2Digits(attend.getMinutes());
+                   // Departure = padTo2Digits(Departure.getHours()) + ':' + padTo2Digits(Departure.getMinutes());
+                });
+
+
+            },
+
+        });
+
+    }
+    function deleteproduct(id) {
+        $('#hiddenid').val(id);
+        alert(id);
+        $.ajax({
+            url: "/Setting/DeleteattendByID?id=" + id,
+            data: '',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                $('#btndelete').show();
+                $('#btncansel').show();
+                $('#btnupdate').hide();
+                $('#btnsave').hide();
+                $.each(result, function (key, item) {
+                    $('#exampleModal').show();
+                    $('.modal').css('opacity', 1);
+                    var attend = eval("new " + result.attend.replace(/\//g, ""));
+                    var Departure = eval("new " + result.Departure.replace(/\//g, ""));
+                    attend = padTo2Digits(attend.getHours()) + ':' + padTo2Digits(attend.getMinutes());
+                    Departure = padTo2Digits(Departure.getHours()) + ':' + padTo2Digits(Departure.getMinutes());
+                    $('#employyeId').val(result.employeeId);
+                    $('#attend').val(attend);
+                    $('#Departure').val(Departure);
+                });
+
+
+            },
+
+        });
+
+    }
+</script>

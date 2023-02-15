@@ -1,0 +1,78 @@
+﻿@model IEnumerable<BLL.SallaryReportViewModel>
+@{
+    ViewBag.Title = "sallaryemployee";
+}
+
+<h2 >رواتب الموظفين</h2>
+
+<div class="container">
+
+    <div class="content d-flex">
+
+        <div style="margin-top:45px">
+            <form action="sallaryemployee">
+                <p>
+                    <input type="text" name="search" placeholder="البحث باسم الموظف" />
+                </p>
+                <p>
+                    شهر: <input type="text" name="month" />
+                </p>
+                <p>
+                    سنه : <input type="text" name="year" />
+                    <input type="submit" value="بحث" class="btn btn-primary" />
+                </p>
+
+            </form>
+
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="background-color:cadetblue;color:white">اسم الموظف</th>
+                <th scope="col" style="background-color:cadetblue;color:white">القسم</th>
+                <th scope="col" style="background-color:cadetblue;color:white">الراتب الاساسى</th>
+                <th scope="col" style="background-color:cadetblue;color:white">عدد ايام الحضور</th>
+                <th scope="col" style="background-color:cadetblue;color:white">عدد ايام الغياب</th>
+                <th scope="col" style="background-color:cadetblue;color:white">الاضافى بالساعات</th>
+                <th scope="col" style="background-color:cadetblue;color:white">الخصم بالساعات</th>
+                <th scope="col" style="background-color:cadetblue;color:white"> اجمالى الاضافى </th>
+                <th scope="col" style="background-color:cadetblue;color:white">اجمالى الخصم  </th>
+                <th scope="col" style="background-color:cadetblue;color:white">الصافى</th>
+                <th scope="col" style="background-color:cadetblue;color:white">العمليات</th>
+
+            </tr>
+        </thead>
+        <tbody class="tbody">
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Employeename</td>
+                    <td>@item.DepartmentName</td>
+                    <td>@item.sallary</td>
+                    <td>@item.AttendedDay</td>
+                    <td>@item.DeparturedDay</td>
+                    <td>@item.OverTimeHours</td>
+                    <td>@item.HoursDiscount</td>
+                    <td>@item.totalExtra</td>
+                    <td>@item.totalDiscount</td>
+                    <td>@item.NetSallary</td>
+                    <td>
+                        <a href="/HR/employee/@item.employeeID" ;retrunfalse;"><i class="fa fa-edit" style="fontsize:x-large;color:blue"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (ViewBag.massage != null)
+    {
+       <p>@ViewBag.massage</p> 
+    }    
+    @if (ViewBag.CorrectYear != null)
+    {
+       <p>@ViewBag.CorrectYear</p> 
+    }
+</div>

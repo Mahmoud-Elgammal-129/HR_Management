@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BLL.GroupViewModel>
+
+@{
+    ViewBag.Title = "groups";
+}
+
+<h2 style="margin-top:120px;">المجموعات</h2>
+
+
+<a href="/HR/Authentication">اضافة جروب جديد</a>
+
+<table class="table" >
+    <tr >
+        <td style="background-color:cadetblue;color:white; text-align: center" >
+           اسم المجموعة
+        </td>
+        
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align: center";>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            
+        </tr>
+    }
+
+</table>

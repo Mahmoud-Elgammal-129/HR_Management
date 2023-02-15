@@ -1,0 +1,74 @@
+﻿@model BLL.DepartmentViewModel
+    @{
+        ViewBag.Title = "dept";
+    }
+
+    <h2 style="margin-top:120px;">الاقسام</h2>
+
+<form id="form"> 
+     <div>
+    <table>
+        <tr>
+
+            <td>القسم</td>
+            <td>
+                @*<input type="text" class="form-control" placeholder="اضافة قسم" id="txtuser" />*@
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+
+
+    </table>
+
+    <br />
+    <button type="submit" class="btn btn-success" id="btnsave" style="margin-left:90px;">SAVE</button>
+</div></form>
+    
+    
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    <script>
+        $(document).ready(function () {
+
+
+            $('#btnsave').click(function (event) {
+                event.preventDefault();
+                if ($('#form').valid()) {
+
+                    var name = $('#name').val();
+
+
+                    $.ajax({
+                        url: "/HR/departments?name=" + name,
+                        data: '',
+                        type: "POST",
+                        contentType: "application/json;charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == "success") {
+                                alert("تم التسجيل")
+
+                            }
+
+                        },
+                        error: function (errormessage) {
+                            alert(errormessage.responseText);
+                        }
+
+                    });
+
+
+                }
+                else {
+                    alert("Validation failed");
+                }
+                })  
+        
+
+
+        });
+
+    </script>

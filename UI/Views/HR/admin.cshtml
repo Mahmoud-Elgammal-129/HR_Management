@@ -1,0 +1,167 @@
+﻿@model BLL.AdminViewModel
+@{
+    ViewBag.Title = "مستخدمين النظام";
+}
+
+<h2 style="margin-top:120px;">اضافة مستخدم جديد</h2>
+
+
+<form id="form">
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <table>
+
+            <tr>
+                <td>
+                    الاسم بالكامل
+                </td>
+
+                <td style="text-align:right">
+
+                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+
+                    @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+
+                </td>
+
+            </tr>
+
+            <tr>
+                <td> اسم المستخدم</td>
+                <td style="text-align:right">
+                    @*<input type="text" class="form-control" placeholder="اسم المستخدم" id="txtuser" />*@
+                    @Html.EditorFor(model => model.userName, new { htmlAttributes = new { @class = "form-control" } })
+
+                    @Html.ValidationMessageFor(model => model.userName, "", new { @class = "text-danger" })
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>الايميل الالكترونى</td>
+                <td style="text-align:right">
+
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+
+                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>الباسورد</td>
+                <td style="text-align:right">
+
+                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>الصلاحيات</td>
+
+                <td style="text-align:right">
+
+                    <select class="form-control input-validation-error" aria-describedby="password-error" name="groupId" id="groupId">
+                        <option>Select </option>
+                        @foreach (var item in ViewBag.groups)
+                        {
+                            <option value="@item.Id">@item.name</option>
+
+                        }
+                    </select>
+
+                    @Html.ValidationMessageFor(model => model.groupId, "", new { @class = "text-danger" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>الشرط</td>
+                <td>
+                    <select class="form-control" id="Role">
+                        <option>Select role</option>
+                        @foreach (var item in ViewBag.roles)
+                        {
+                            <option value="@item.RolrId">@item.RoleName</option>
+                        }
+                    </select>
+                    @*@Html.ValidationMessageFor(model => model.RolrId, "", new { @class = "text-danger" })*@
+
+                </td>
+
+            </tr>
+
+        </table>
+
+        <br />
+        <button type="submit"  class="btn btn-success" id="btnsave" style="margin-left:90px;">save</button>
+    </div>
+
+</form>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $(document).ready(function () {
+        $("#btnsave").click(function (event) {
+            event.preventDefault();
+            if ($('#form').valid()) {
+            var name = $('#name').val();
+            var username = $('#userName').val();
+            var email = $('#email').val();
+            var password = $('#password').val();
+                var groupId = $('#groupId').val();
+                var RoleId = $('#Role').val();
+                alert(RoleId);
+            $.ajax({
+                url: "/HR/admin?name=" + name +
+                    "&username=" + username +
+                    "&email=" + email +
+                    "&password=" + password +
+                    "&RolrId=" + RoleId +
+                    "&groupId=" + groupId,
+
+                data: '',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result == "success") {
+                        alert("تم التسجيل")
+                        cleardata();
+
+                    }
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+                });
+            } else {
+                //alert("Validation failed");
+            }
+            cleardata();
+        })
+    
+        
+       
+
+
+    });
+    function cleardata() {
+
+        $('#name').val('');
+        $('#userName').val('');
+        $('#email').val('');
+        $('#password').val('');
+        $('#groupId').val(-1);
+         $('#Role').val(-1);
+    }
+</script>

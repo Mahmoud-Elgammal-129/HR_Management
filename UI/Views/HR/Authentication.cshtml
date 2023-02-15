@@ -1,0 +1,258 @@
+﻿
+@{
+    ViewBag.Title = "Authentication";
+    
+}
+
+<h2 style="margin-top:120px;">مجموعة المستخدمين</h2>
+    <div class="container">
+        <div class="input-group mb-3">
+            <input type="text" id="groupName" class="form-control" placeholder="اسم المجموعة" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button type="submit" id="add" class="btn btn-primary">حفظ</button>
+            </div>
+        </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="background-color:cadetblue;color:white">Select </th>
+                            <th scope="col"style="background-color:cadetblue;color:white">الصفحة</th>
+                            <th scope="col"style="background-color:cadetblue;color:white">اضافة</th>
+                            <th scope="col"style="background-color:cadetblue;color:white">حذف</th>
+                            <th scope="col"style="background-color:cadetblue;color:white">تعديل</th>
+                            <th scope="col"style="background-color:cadetblue;color:white">عرض</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" onchange="addChecked(this)" class="custom-control-input" id="customCheck1" >
+                                   
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+
+                                    <label class="custom-control-label" for="customCheck1">الموظفين</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1" >
+                                </div>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" onchange="addChecked(this)" class="custom-control-input" id="customCheck2">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+
+                                    <label class="custom-control-label" for="customCheck2">الاعدادات العامة</label>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2" >
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" onchange="addChecked(this)" class="custom-control-input" id="customCheck3">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+
+                                    <label class="custom-control-label" for="customCheck3">الحضور والانصراف</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck3" >
+                                 
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck3" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck3" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck3" >
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input onchange="addChecked(this)" type="checkbox" class="custom-control-input" id="customCheck4">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+
+                                    <label class="custom-control-label" for="customCheck4">تقرير الرواتب</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck4" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck4" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck4" >
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck4" >
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#add").on("click", function (event) {
+
+             var myArray = new Array();
+            $('.checked').each(function () {
+                var name = $(this).children().eq(1).children().children().text();
+                var canAdd = $(this).children().eq(2).children().children('input').is(':checked');
+                var canUpdate = $(this).children().eq(4).children().children('input').is(':checked');
+                var canDelete = $(this).children().eq(3).children().children('input').is(':checked');
+                var canView = $(this).children().eq(5).children().children('input').is(':checked');
+                var groupID = 0;
+
+
+                myArray.push({
+                    name: name,
+                    canAdd: canAdd,
+                    canUpdate: canUpdate,
+                    canView: canView,
+                    groupID: groupID,
+                    canDelete: canDelete,
+                });
+
+
+            });
+            var groupName = $('#groupName').val();
+
+            if (myArray.length == 0) {
+                alert("من فضلك قم بتحديد صلحيات المجموعه");
+            }
+            else {
+                if (groupName == null || groupName == '') {
+                    alert("من فضلك قم بادخال اسم المجموعه");
+                }
+                else {
+                    $.ajax({
+                        url: '/HR/Authentication?name=' + groupName,
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(myArray),
+                        success: function (result) {
+                            if (result == "success") {
+                                alert("تم التسجيل ");
+                            }
+                            else if (result == "exist") {
+                                alert(e.responseText);
+
+                            }
+
+                        },
+                        error: function (e) {
+                        }
+                    });
+
+                }
+
+            }
+
+        });
+    })
+
+    function Add() {
+
+        $.ajax({
+            url: "/HR/Authentication",
+            data: '',
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+            }
+        })
+
+
+    }
+
+    function addChecked(element) {
+        if ($(element).is(':checked')) {
+            $(element).parent().parent().parent().addClass('checked');
+        }
+        else {
+            $(element).parent().parent().parent().removeClass('checked');
+
+        }
+    }
+</script>

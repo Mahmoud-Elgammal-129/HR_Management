@@ -1,0 +1,142 @@
+﻿@model BLL.PublicSetting
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<div class="container">
+    <form id="form">
+        <div class="column">
+            <label class="form-control"> الاعدادت العامة</label><br />
+
+            <table>
+
+
+                <tr>
+                    <td> الاضافة</td>
+                    <td>
+                        @*<input type="text" class="form-control" placeholder="2 hour" id="txtadd" />*@
+                        @Html.EditorFor(model => model.HoursViewModel.addHours, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.ValidationMessageFor(model => model.HoursViewModel.addHours, "", new { @class = "text-danger" })
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> الخصم</td>
+                    <td>
+                        @*<input type="text" class="form-control" placeholder=" 2 hour" id="txtremove" />*@
+                        @Html.EditorFor(model => model.HoursViewModel.removeHours, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.ValidationMessageFor(model => model.HoursViewModel.removeHours, "", new { @class = "text-danger" })
+
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>يوم الاجازة الرسمى1</td>
+                    <td>
+                        <select class="form-control day1" id="WeekalyHolidayViewModel.day1" data-val="true"
+                                data-val-required="The CreationDate field is required."
+                                name="WeekalyHolidayViewModel.day1">
+                            <option value="-1" selected disabled>Select day</option>
+                            <option>السبت</option>
+                            <option>الاحد</option>
+                            <option>الاثنين</option>
+                            <option>الثلاثاء</option>
+                            <option>الاربعاء</option>
+                            <option>الخميس</option>
+                            <option>الجمعة</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.WeekalyHolidayViewModel.day1, "", new { @class = "text-danger" })
+
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>يوم الاجازة الرسمى2</td>
+                    <td>
+                        <select class="form-control day2" id="WeekalyHolidayViewModel.day2" data-val="true"
+                                data-val-required="The CreationDate field is required."
+                                name="WeekalyHolidayViewModel.day2">
+                            <option value="-1" selected disabled>Select day</option>
+                            <option>السبت</option>
+                            <option>الاحد</option>
+                            <option>الاثنين</option>
+                            <option>الثلاثاء</option>
+                            <option>الاربعاء</option>
+                            <option>الخميس</option>
+                            <option>الجمعة</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.WeekalyHolidayViewModel.day2, "", new { @class = "text-danger" })
+
+                    </td>
+
+                </tr>
+
+
+            </table>
+        </div>
+
+    </form>
+    <br />
+    <br />
+    <br />
+    <button class="btn btn-success" type="button" id="btnsave" style="margin-left:250px;">حفظ</button>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $(document).ready(function () {
+
+        $("#btnsave").click(function (event) {
+            event.preventDefault();
+            if ($('#form').valid()) {
+                var HoursViewModel = {
+                    addHours: $('#HoursViewModel_addHours').val(),
+                    removeHours: $('#HoursViewModel_removeHours').val(),
+
+                };
+                var WeekalyHolidayViewModel = {
+                    name: $('#txtdate').val(),
+                    day1: $('.day1').val(),
+                    day2: $('.day2').val(),
+                };
+                var setting = {
+                    "HoursViewModel": HoursViewModel,
+                    "WeekalyHolidayViewModel": WeekalyHolidayViewModel,
+                };
+                console.log(setting);
+
+                $.ajax({
+                    url: "/Setting/AddPublicSetting",
+                    data: JSON.stringify(setting),
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "success") {
+                            alert("saved successfuly")
+
+                        }
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+
+
+            }
+
+
+        })
+
+
+    });
+</script>

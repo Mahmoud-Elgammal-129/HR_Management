@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="29d2fde3522e4db7b2dbf0ea1d612a4e" Name="Diagram1">
+        <EntityTypeShape EntityType="HRModel.Admin" Width="1.5" PointX="10" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.Attendance" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.Authentication" Width="1.5" PointX="10" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.Department" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.EmployeeWorkData" Width="1.5" PointX="5.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.EmpolyeePersonalData" Width="1.5" PointX="3" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.Group" Width="1.5" PointX="7.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.Hours" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.OfficialVacations" Width="1.5" PointX="2.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.Roles" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.sysdiagrams" Width="1.5" PointX="4.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRModel.WeekalyHoliday" Width="1.5" PointX="6.75" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="HRModel.FK_Admin_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="HRModel.FK_Admin_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="HRModel.FK_Attendance_EmpolyeePersonalData" ManuallyRouted="false" />
+        <AssociationConnector Association="HRModel.FK_Authentication_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="HRModel.FK_EmpolyeePersonalData_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="HRModel.FK_EmployeeWorkData_EmpolyeePersonalData" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

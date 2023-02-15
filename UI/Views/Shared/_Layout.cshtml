@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+
+            @if((bool)Session["IsLogined"])
+            {
+                <div class="navbar-collapse collapse">
+
+                    }
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Authentication", "Authentication", "HR")</li>
+                            <li>@Html.ActionLink("Groups", "groups", "HR")</li>
+                            <li>@Html.ActionLink("Admin", "admin", "HR")</li>
+                            <li>@Html.ActionLink("employee", "employee", "HR")</li>
+                            <li>@Html.ActionLink("departments", "departments", "HR")</li>
+                            <li>@Html.ActionLink("AddPublicSetting", "Index", "Setting")</li>
+                            <li>@Html.ActionLink("OfficialVacations", "OfficialVacations", "Setting")</li>
+                            <li>@Html.ActionLink("ReportAttended", "ReportAttended", "Setting")</li>
+                            <li>@Html.ActionLink("sallaryemployee", "sallaryemployee", "Setting")</li>
+                            <li>@Html.ActionLink("Logout", "Logout", "HR")</li>
+                        </ul>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+
+            }
+        </div>
+        
+        </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

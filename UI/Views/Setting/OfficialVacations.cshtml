@@ -1,0 +1,277 @@
+﻿
+
+
+<h2>OfficialVacations</h2>
+<form>
+    <div class="container">
+        <div class="content">
+           
+            <table>
+                <tr>
+
+                    <td>الاسم</td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="اضافة اسم" id="txtuser" />
+                        <span id="txtError" class="text-danger">يجب ادخال الاسم </span>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td>التاريخ</td>
+                    <td>
+                        <input type="date" class="form-control" id="txtdate" />
+                        <span  class="text-danger"  type="text" id="newsdate" name="news_date">يجب ادخال التاريخ </span>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td style="text-align:right">
+                        <button class="btn btn-primary w-100" type="button" id="btnsave" style="margin-left:250px;">حفظ</button>
+                        <button class="btn btn-success w-100" type="button" id="btnupdate" style="margin-left:250px;">تعديل</button>
+                        <button class="btn btn-danger w-100" type="button" id="btndelete" style="margin-left:250px;">حذف</button>
+                        <button class="btn btn-primary w-100" type="button" id="btncansel" style="margin-left:250px;">الغاء</button>
+                    </td>
+                </tr>
+
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="background-color:cadetblue;color:white">الاسم</th>
+                        <th scope="col" style="background-color:cadetblue;color:white">التاريخ</th>
+                        <th scope="col" style="background-color:cadetblue;color:white">العمليات</th>
+
+                    </tr>
+                </thead>
+                <tbody class="tbody"></tbody>
+            </table>
+
+
+
+
+        </div>
+        <br />
+        <br />
+        <br />
+        <input type="hidden" id="hiddenid"/>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        loadData();
+        $('#txtError').hide();
+        $('#newsdate').hide();
+        
+
+        $('#btnsave').click(function () {
+            var day = $('#txtuser').val();
+            var date = $('#txtdate').val();
+            if (day == null || day == '' || date == null || date == '') {
+                $('#txtError').show();
+                $('#newsdate').show();
+            }
+            else {
+                $.ajax({
+                    url: "/Setting/AddOfficialVacations?day=" + day +
+                        "&date=" + date,
+                    data: '',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "success") {
+                            alert("saved successfuly")
+                            loadData();
+                            Reset();
+
+                        }
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+
+            }
+           
+            
+
+           
+
+        })
+        $('#btncansel').click(function () {
+            Reset();
+            $('#btncansel').hide();
+            $('#btnupdate').hide();
+            $('#btndelete').hide();
+            $('#btnsave').show();
+        })
+        $('#btnupdate').click(function () {
+            var day = $('#txtuser').val();
+            var date = $('#txtdate').val();         
+            var id = $('#hiddenid').val();
+            if (day == null || day == '') {
+                $('#txtError').show();
+            }
+            else {
+                $.ajax({
+                    url: "/Setting/UpdateOfficialVacations?id=" + id +
+                        "&day=" + day +
+                        "&date=" + date,
+
+
+
+                    data: '',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "success") {
+                            alert("savedsuccessfuly");
+                            Reset();
+                            loadData();
+                        }
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+
+            }
+        })
+        $('#btndelete').click(function () {
+            var id = $('#hiddenid').val();
+                $.ajax({
+                    url: "/Setting/DeleteOfficialVacations?id=" + id ,
+                        
+                    data: '',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "success") {
+                            alert("Data has been deleted.");
+                            Reset();
+                            loadData();
+                        }
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+
+            
+        })
+
+    });
+
+    function loadData() {
+        $.ajax({
+            url: "/Setting/GetOfficialVacations",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '';
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                $('#btnupdate').hide();
+                $('#btndelete').hide();
+                $('#btncansel').hide();
+
+               
+                $.each(result, function (key, item) {
+                    var date = eval("new " + item.date.replace(/\//g, ""));
+                    html += '<tr>';
+                    html += '<td>' + item.day + '</td>';
+                    html += '<td>' + date.toLocaleDateString('ar-EG', options) + '</td>';
+                    html += '<td><a href="javascript:void(0);" onclick=updateproduct(' + item.id + ');>' +
+                        '<i class="fa fa-edit"style="fontsize:x-large;color:blue"></i></a>' +
+                        ' <a href="javascript:void(0);"  onclick=deleteproduct(' + item.id + ');>' +
+                        ' <i class="fa fa-trash"style="fontsize:x-large;color:red;"></i></a>' +
+                        '</td>';
+                    html += '</tr>';
+                });
+
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+
+    }
+    function Reset() {
+        $('#txtuser').val('');
+
+        $('#txtdate').val('');
+    }
+    function updateproduct(id) {
+        $('#hiddenid').val(id);
+        $.ajax({
+            url: "/Setting/GetOfficialVacationsByID?id=" +id,
+            data: '',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+               
+                $('#btnupdate').show();
+                $('#btncansel').show();
+                $('#btndelete').hide();
+                $('#btnsave').hide();
+                $.each(result, function (key, item) {
+                    var date = eval("new " + result.date.replace(/\//g, ""));
+                    var newdate = new Date(date);
+                    date.setDate(newdate.getDate() + 1);
+                    $('#txtuser').val(result.day);
+                    $('#txtdate').val(date.toISOString().split('T')[0]);
+                    //var x = date.toLocaleDateString('en-us', options);
+                    //var d = new Date(result.date);
+                    //alert(date.toISOString().split('T')[0]);
+                });
+
+
+            },
+
+        });
+
+    }
+    function deleteproduct(id) {
+        $('#hiddenid').val(id);
+        alert(id);
+        $.ajax({
+            url: "/Setting/GetOfficialVacationsByID?id=" + id,
+            data: '',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+               
+                $('#btndelete').show();
+                $('#btncansel').show();
+                $('#btnupdate').hide();
+                $('#btnsave').hide();
+                $.each(result, function (key, item) {
+                    var date = eval("new " + result.date.replace(/\//g, ""));
+                    var newdate = new Date(date);
+                    date.setDate(newdate.getDate() + 1);
+                    $('#txtuser').val(result.day);
+                    $('#txtdate').val(date.toISOString().split('T')[0]);
+                    //var x = date.toLocaleDateString('en-us', options);
+                    //var d = new Date(result.date);
+                    //alert(date.toISOString().split('T')[0]);
+                });
+
+
+            },
+
+        });
+
+    }
+   
+</script>
